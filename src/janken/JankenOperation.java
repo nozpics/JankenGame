@@ -6,22 +6,28 @@ import java.util.Scanner;
  * じゃんけんゲームの動作クラス。
  */
 public class JankenOperation {
-	public static int member;
-	public static int myChoice;
-	public static int[] enemyChoice;
+	public static int memberCount;
+	public static int gameCount;
+	public static int totalWinCount;
 	public static String myHand;
 	public static String[] enemyHand;
+	
 	public static final String GUU = "グー";
 	public static final String CHOKI = "チョキ";
 	public static final String PAA = "パー";
 	
-	
+	/**
+	 * じゃんけんゲームの動作メソッド。
+	 */
 	public static void jankenOperation() {
-		
 		System.out.println("じゃんけんを始めます。");
-		member = battleMember();
-		myChoice = gameStart();
-		gameCheck(myChoice);
+		memberCount = getMemberCount();
+		gameCount = getGameCount();
+		for(int i=1; i<gameCount+1;i++) {
+			System.out.println(i + "回戦");
+			gameCheck(gameStart());
+		}
+		System.out.println("勝ち数：" + totalWinCount);
 		System.out.println("じゃんけんを終了します。");
 	}
 	
@@ -31,16 +37,18 @@ public class JankenOperation {
 	 * @throws NumberFormatException
 	 * 文字が入力された場合
 	 */
-	public static int battleMember() {
+	public static int getMemberCount() {
 		Scanner sc= new Scanner(System.in);
 		boolean check = true;
-		System.out.println("対戦人数を入力して下さい。");
+		int count = 0;
+		System.out.println("敵の人数を入力して下さい。");
+		
 		while(check) {
 			String inputMember = sc.nextLine();
 			try{
 				if(inputMember.matches("\\d+")) {
-					member = Integer.parseInt(inputMember);
-					if(member<2) {
+					count = Integer.parseInt(inputMember);
+					if(count<2) {
 						System.out.println("２以上の半角数字を入力して下さい。");	
 					}else {
 					check = false;
@@ -52,18 +60,50 @@ public class JankenOperation {
 				System.out.println("２以上の半角数字を入力して下さい。");
 			}
 		}
-		return member;
+		return count;
+	}
+	
+	/**
+	 * ゲーム回数を決めて返すメソッド
+	 * @return ゲーム回数
+	 * @throws NumberFormatException
+	 * 文字が入力された場合
+	 */
+	public static int getGameCount() {
+		Scanner sc = new Scanner(System.in);
+		boolean check = true;
+		int count = 0;
+		System.out.println("対戦回数を入力して下さい。");
+		while(check) {
+			String inputCount = sc.nextLine();
+			try {
+				if(inputCount.matches("\\d+")) {
+					count = Integer.parseInt(inputCount);
+					if(count<1) {
+						System.out.println("１以上の半角数字を入力して下さい。");
+					}else {
+						check = false;
+					}
+				}else {
+					System.out.println("１以上の半角数字を入力して下さい。");
+				}
+			}catch(NumberFormatException e) {
+				System.out.println("１以上の半角数字を入力して下さい。");
+			}
+		}
+		return count;
 	}
 	
 	/**
 	 * じゃんけんを始め、自分の手を決めるまでのメソッド。
-	 * @return 自分のじゃんけんの手を表す数字。
+	 * @return 入力された自分のじゃんけんの手を表す数字。
 	 * @throws NumberFormatException
 	 * 文字が入力された場合
 	 */
 	public static int gameStart() {
 		Scanner sc = new Scanner(System.in);
 		boolean check = true;
+		int choice = 0;
 		System.out.println("あなたの出す手を選択して下さい。");
 		while(check) {
 			System.out.println("1:"+ GUU + "、2:" + CHOKI + "、3:" + PAA);
@@ -72,14 +112,14 @@ public class JankenOperation {
 				if(!input.matches("[1-3]")) {
 					System.out.println("半角1,2,3のどれかを入力して下さい。");
 				} else {
-					myChoice = Integer.parseInt(input); 
+					choice = Integer.parseInt(input); 
 				check = false;
 				}
 			}catch(NumberFormatException e) {
 				System.out.println("半角1,2,3のどれかを入力して下さい。");
 			}
 		}
-		return myChoice;
+		return choice;
 	}
 	
 	/**
@@ -87,13 +127,14 @@ public class JankenOperation {
 	 * @param yourChoice　自分のじゃんけんの手。
 	 */
 	public static void gameCheck(int myChoice) {
-		StringBuilder enemiesHand = new StringBuilder();
-		enemyChoice = new int[member];
-		enemyHand = new String[member];
+		
+		int[] enemyChoice = new int[memberCount];
+		enemyHand = new String[memberCount];
 		Random random = new Random();
+		StringBuilder enemiesHand = new StringBuilder();
 		
 		myHand = choice(myChoice);
-		for(int i=0;i<member;i++) {
+		for(int i=0;i<memberCount;i++) {
 			enemyChoice[i] = random.nextInt(3)+1;//敵のじゃんけんの種類をランダムに取得
 			enemyHand[i] = choice(enemyChoice[i]);
 			enemiesHand.append(enemyHand[i] + " ");
@@ -143,12 +184,12 @@ public class JankenOperation {
 		//勝ち数と負け数で勝敗を判定
 		if(winCount > 0 && loseCount == 0) {
 			System.out.println("あなたの勝ちです。");
+			totalWinCount++;
 		}else if(loseCount > 0 && winCount == 0) {
 			System.out.println("あなたの負けです。");
 		}else {
 			System.out.println("あいこでしょ！！");
-			gameStart();
-			gameCheck(myChoice);
+			gameCheck(gameStart());
 		}
 	}
 }
