@@ -19,9 +19,9 @@ public class JankenSurvival {
 	public static void jankenSurvival(){
 		System.out.println("勝ち抜きバトルを始めます。");
 		gameCheck(JankenGroup.gameStart());
-		survivalBattle(myHand,enemyHand);
 		System.out.println("勝ち抜きバトルを終了します。");
 		getTitle(winRecord);
+		winRecord = 0;
 	}
 	
 	/**
@@ -35,6 +35,7 @@ public class JankenSurvival {
 		enemyChoice = random.nextInt(3)+1;
 		enemyHand = JankenGroup.choice(enemyChoice);
 		System.out.println("あなたの手：" + myHand + "　相手の手：" + enemyHand);
+		survivalBattle(myHand,enemyHand);
 	}
 	
 	/**
