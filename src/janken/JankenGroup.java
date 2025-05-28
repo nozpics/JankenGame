@@ -3,9 +3,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * じゃんけんゲームの動作クラス。
+ * みんなでバトルゲームの動作クラス。
  */
-public class JankenOperation {
+public class JankenGroup {
 	public static int memberCount;
 	public static int gameCount;
 	public static int totalWinCount;
@@ -17,10 +17,10 @@ public class JankenOperation {
 	public static final String PAA = "パー";
 	
 	/**
-	 * じゃんけんゲームの動作メソッド。
+	 * みんなでバトルゲームの動作メソッド。
 	 */
-	public static void jankenOperation() {
-		System.out.println("じゃんけんを始めます。");
+	public static void jankenGroup() {
+		System.out.println("みんなでバトルを始めます。");
 		memberCount = getMemberCount();
 		gameCount = getGameCount();
 		for(int i=1; i<gameCount+1;i++) {
@@ -124,7 +124,7 @@ public class JankenOperation {
 	
 	/**
 	 * ゲームの勝敗を決めるメソッド。
-	 * @param yourChoice　自分のじゃんけんの手。
+	 * @param myChoice　自分のじゃんけんの手。
 	 */
 	public static void gameCheck(int myChoice) {
 		
