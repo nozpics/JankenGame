@@ -6,11 +6,11 @@ import java.util.Scanner;
  * みんなでバトルゲームの動作クラス。
  */
 public class JankenGroup {
-	public static int memberCount;
-	public static int gameCount;
-	public static int totalWinCount;
+	public static int enemyCount;
+	public static int totalRounds;
+	public static int totalWins;
 	public static String myHand;
-	public static String[] enemyHand;
+	public static String[] enemyHands;
 	
 	public static final String GUU = "グー";
 	public static final String CHOKI = "チョキ";
@@ -21,13 +21,13 @@ public class JankenGroup {
 	 */
 	public static void jankenGroup() {
 		System.out.println("みんなでバトルを始めます。");
-		memberCount = getMemberCount();
-		gameCount = getGameCount();
-		for(int i=1; i<gameCount+1;i++) {
+		enemyCount = getMemberCount();
+		totalRounds = getGameCount();
+		for(int i=1; i<totalRounds+1;i++) {
 			System.out.println(i + "回戦");
 			gameCheck(gameStart());
 		}
-		System.out.println("勝ち数：" + totalWinCount);
+		System.out.println("勝ち数：" + totalWins);
 		System.out.println("じゃんけんを終了します。");
 	}
 	
@@ -128,19 +128,19 @@ public class JankenGroup {
 	 */
 	public static void gameCheck(int myChoice) {
 		
-		int[] enemyChoice = new int[memberCount];
-		enemyHand = new String[memberCount];
+		int[] enemyChoice = new int[enemyCount];
+		enemyHands = new String[enemyCount];
 		Random random = new Random();
 		StringBuilder enemiesHand = new StringBuilder();
 		
 		myHand = choice(myChoice);
-		for(int i=0;i<memberCount;i++) {
+		for(int i=0;i<enemyCount;i++) {
 			enemyChoice[i] = random.nextInt(3)+1;//敵のじゃんけんの種類をランダムに取得
-			enemyHand[i] = choice(enemyChoice[i]);
-			enemiesHand.append(enemyHand[i] + " ");
+			enemyHands[i] = choice(enemyChoice[i]);
+			enemiesHand.append(enemyHands[i] + " ");
 		}
 		System.out.println("あなたの手：" + myHand + "　相手の手：" + enemiesHand);
-		battle(myHand,enemyHand);
+		battle(myHand,enemyHands);
 	}
 	
 	/**
@@ -165,7 +165,7 @@ public class JankenGroup {
 	 }
 	/**
 	 * じゃんけんの種類による勝ち負けの判定メソッド。
-	 * あいこの場合はもう一度。
+	 * あいこの場合、再帰的に呼び出して再度じゃんけんを行う。
 	 * @param me 自分の手
 	 * @param enemy 敵の手
 	 */
@@ -184,7 +184,7 @@ public class JankenGroup {
 		//勝ち数と負け数で勝敗を判定
 		if(winCount > 0 && loseCount == 0) {
 			System.out.println("あなたの勝ちです。");
-			totalWinCount++;
+			totalWins++;
 		}else if(loseCount > 0 && winCount == 0) {
 			System.out.println("あなたの負けです。");
 		}else {
