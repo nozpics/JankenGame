@@ -50,7 +50,7 @@ public class JankenSurvival {
 			System.out.println(winRecord + "連勝中！");
 			gameCheck(JankenGroup.gameStart());
 		}else if((me.equals(GUU) && e.equals(PAA)) || (me.equals(CHOKI) && e.equals(GUU)) || (me.equals(PAA) && e.equals(CHOKI))){
-			System.out.println("あなたの負けです。");
+			System.out.println("相手の勝ちです。");
 		}else {
 			System.out.println("あいこでしょ！");
 			gameCheck(JankenGroup.gameStart());
