@@ -3,7 +3,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * みんなでバトルゲームの動作クラス。
+ * じゃんけんゲームの動作クラス。
  */
 public class JankenGroup {
 	public static int enemyCount;
@@ -22,7 +22,7 @@ public class JankenGroup {
 	public static final String HANDSERROR = "半角1,2,3のどれかを入力して下さい。";
 	
 	/**
-	 * みんなでバトルゲームの動作メソッド。
+	 * じゃんけんゲームの動作メソッド。
 	 */
 	public static void jankenGroup() {
 		System.out.println("じゃんけんを始めます。");
