@@ -6,31 +6,35 @@ import java.util.Scanner;
  * じゃんけんゲームの動作クラス。
  */
 public class JankenGroup {
-	public static int enemyCount;
-	public static int totalRounds;
-	public static int totalWins;
-	public static String[] enemyHands;
+	public int enemyCount;
+	public int totalRounds;
+	public int totalWins;
+	public String[] enemyHands;
 	
-	public static String myHand;
-	public static String enemiesHand;
+	public String myHand;
+	public String enemiesHand;
 	
-	public static final String GUU = "グー";
-	public static final String CHOKI = "チョキ";
-	public static final String PAA = "パー";
-	public static final String ENEMYERROR = "2以上の半角数字を入力して下さい。";
-	public static final String ROUNDSERROR = "1以上の半角数字を入力して下さい。";
-	public static final String HANDSERROR = "半角1,2,3のどれかを入力して下さい。";
+	public final String GUU = "グー";
+	public final String CHOKI = "チョキ";
+	public final String PAA = "パー";
+	public final String ENEMYERROR = "2以上の半角数字を入力して下さい。";
+	public final String ROUNDSERROR = "1以上の半角数字を入力して下さい。";
+	public final String HANDSERROR = "半角1,2,3のどれかを入力して下さい。";
+	
+	Scanner sc = new Scanner(System.in); //標準入力用
 	
 	/**
 	 * じゃんけんゲームの動作メソッド。
 	 */
-	public static void jankenGroup() {
+	public void jankenGroup() {
 		System.out.println("じゃんけんを始めます。");
-		enemyCount = getMemberCount();
-		totalRounds = getGameCount();
+		enemyCount = getMemberCount(sc);
+		totalRounds = getGameCount(sc);
+		
 		for(int i=1; i<totalRounds+1;i++) {
 			System.out.println(i + "回戦");
-			gameCheck(gameStart());
+			myHand = getMyHand(sc);
+			gameCheck();
 		}
 		System.out.println("勝ち数：" + totalWins);
 		System.out.println("じゃんけんを終了します。");
@@ -42,15 +46,15 @@ public class JankenGroup {
 	 * @throws NumberFormatException
 	 * 文字が入力された場合
 	 */
-	public static int getMemberCount() {
-		Scanner sc= new Scanner(System.in);
+	public int getMemberCount(Scanner sc) {
 		boolean check = true;
 		int count = 0;
+		
 		System.out.println("対戦人数を入力して下さい。");
 		
 		while(check) {
 			String inputMember = sc.nextLine();
-			try{
+			
 				if(inputMember.matches("\\d+")) {
 					count = Integer.parseInt(inputMember);
 					if(count<2) {
@@ -62,9 +66,6 @@ public class JankenGroup {
 				}else {
 					System.out.println(ENEMYERROR);
 				}
-			}catch(NumberFormatException e){
-				System.out.println(ENEMYERROR);
-			}
 		}
 		return count;
 	}
@@ -75,14 +76,14 @@ public class JankenGroup {
 	 * @throws NumberFormatException
 	 * 文字が入力された場合
 	 */
-	public static int getGameCount() {
-		Scanner sc = new Scanner(System.in);
+	public int getGameCount(Scanner sc) {
 		boolean check = true;
 		int count = 0;
+		
 		System.out.println("対戦回数を入力して下さい。");
 		while(check) {
 			String inputCount = sc.nextLine();
-			try {
+			
 				if(inputCount.matches("\\d+")) {
 					count = Integer.parseInt(inputCount);
 					if(count<1) {
@@ -93,9 +94,6 @@ public class JankenGroup {
 				}else {
 					System.out.println(ROUNDSERROR);
 				}
-			}catch(NumberFormatException e) {
-				System.out.println(ROUNDSERROR);
-			}
 		}
 		return count;
 	}
@@ -106,34 +104,30 @@ public class JankenGroup {
 	 * @throws NumberFormatException
 	 * 文字が入力された場合
 	 */
-	public static int gameStart() {
-		Scanner sc = new Scanner(System.in);
+	public String getMyHand(Scanner sc) {
 		boolean check = true;
-		int choice = 0;
+		int myChoice = 0;
+		
 		System.out.println("あなたの出す手を選択して下さい。");
 		while(check) {
 			System.out.println("1:"+ GUU + "、2:" + CHOKI + "、3:" + PAA);
 			String input = sc.nextLine();
-			try {
+
 				if(!input.matches("[1-3]")) {
 					System.out.println(HANDSERROR);
 				} else {
-					choice = Integer.parseInt(input); 
+					myChoice = Integer.parseInt(input); 
 				check = false;
 				}
-			}catch(NumberFormatException e) {
-				System.out.println(HANDSERROR);
-			}
 		}
-		return choice;
+		return choice(myChoice);
 	}
 	
 	/**
 	 * ゲームの勝敗を決めるメソッド。
 	 * @param myChoice　自分のじゃんけんの手。
 	 */
-	public static void gameCheck(int myChoice) {
-		myHand = choice(myChoice);
+	public void gameCheck() {
 		enemiesHand = enemyCheck(); 
 		System.out.println("あなたの手：" + myHand + "　相手の手：" + enemiesHand);
 		battle(myHand,enemyHands);
@@ -143,7 +137,7 @@ public class JankenGroup {
 	 * 相手の手をランダムで人数分作成するメソッド。
 	 * @return 相手の人数分の作成した手。
 	 */
-	public static String enemyCheck() {
+	public String enemyCheck() {
 		Random random = new Random();
 		String enemy;
 		StringBuilder enemiesHand = new StringBuilder();
@@ -166,7 +160,7 @@ public class JankenGroup {
 	 * @param hand じゃんけんの種類を表す整数
 	 * @return じゃんけんの種類
 	 */
-	public static String choice(int hand) {
+	public String choice(int hand) {
 		String choiceHand="";
 		switch(hand) {
 			case 1:
@@ -187,7 +181,7 @@ public class JankenGroup {
 	 * @param me 自分の手
 	 * @param enemy 敵の手
 	 */
-	public static void battle(String me,String[] enemy) {
+	public void battle(String me,String[] enemy) {
 		int winCount = 0;
 		int loseCount = 0;
 		for(String e : enemy) {
@@ -207,7 +201,8 @@ public class JankenGroup {
 			System.out.println("相手の勝ちです。");
 		}else {
 			System.out.println("あいこでしょ！！");
-			gameCheck(gameStart());
+			myHand = getMyHand(sc);
+			gameCheck();
 		}
 	}
 }
